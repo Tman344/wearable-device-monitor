@@ -9,9 +9,35 @@
 <body>
     <h1>Wearable Device Monitoring</h1>
     <div id="status-container">
-        <p>Loading status...</p>
+        <!-- No content initially -->
     </div>
 
-    <script src="script.js"></script> <!-- Link to external JavaScript file (optional) -->
+    <script>
+        // Make an HTTP POST request using fetch API
+        fetch('/status', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ deviceId: 'ABC123', status: 'online' })
+        })
+        .then(response => {
+            if (response.ok) {
+                // If request is successful, display the response text in status-container
+                return response.text();
+            } else {
+                // If request failed, display error message
+                throw new Error('Request failed: ' + response.status);
+            }
+        })
+        .then(data => {
+            // Update status-container with the response data
+            document.getElementById('status-container').innerText = data;
+        })
+        .catch(error => {
+            // Handle error if fetch fails
+            document.getElementById('status-container').innerText = 'Error: ' + error.message;
+        });
+    </script> <!-- Include JavaScript code inline -->
 </body>
 </html>
